@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Екатерина Пушкарева](https://up.htmlacademy.ru/javascript/20/user/1129585).
-* Наставник: `Неизвестно`.
+* Наставник: [Виктор Кан](https://up.htmlacademy.ru/htmlcss/27/user/241239).
 
 ---
 
