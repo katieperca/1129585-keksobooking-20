@@ -57,7 +57,7 @@ var createAdverts = function (count) {
         checkin: getRandomValue(CHECKINS),
         checkout: getRandomValue(CHECKOUTS),
         features: getRandomValue(ALL_FEATURES),
-        description: 'строка с описанием',
+        description: 'Строка с описанием',
         photos: PHOTOS
       },
       location: {
@@ -74,9 +74,9 @@ map.classList.remove('map--faded');
 
 var advertsData = createAdverts(advertsCounter);
 
-var template = document.querySelector('#pin').content.querySelector('.map__pin');
+var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
 var createPin = function (data) {
-  var pin = template.cloneNode(true);
+  var pin = templatePin.cloneNode(true);
   pin.style.left = data['location']['x'] + 'px';
   pin.style.top = data['location']['y'] + 'px';
   pin.children[0].src = data['author']['avatar'];
@@ -94,3 +94,104 @@ var renderPins = function (container, data) {
 };
 
 renderPins(pinContainer, advertsData);
+
+var typeToText = function (type) {
+  if (type === 'palace') {
+    return 'Дворец';
+  } else if (type === 'flat') {
+    return 'Квартира';
+  } else if (type === 'house') {
+    return 'Дом';
+  } else {
+    return 'Бунгало';
+  }
+};
+
+var templateCard = document.querySelector('#card').content.querySelector('.map__card');
+var createCard = function (data) {
+  var card = templateCard.cloneNode(true);
+  var popupAvatar = card.querySelector('.popup__avatar');
+  if (!data['author']['avatar']) {
+    popupAvatar.style.display = 'none';
+  } else {
+    popupAvatar.src = data['author']['avatar'];
+  }
+  var popupTitle = card.querySelector('.popup__title');
+  if (!data['offer']['title']) {
+    popupTitle.style.display = 'none';
+  } else {
+    popupTitle.textContent = data['offer']['title'];
+  }
+  var popupTextAddress = card.querySelector('.popup__text--address');
+  if (!data['offer']['address']) {
+    popupTextAddress.style.display = 'none';
+  } else {
+    popupTextAddress.textContent = data['offer']['address'];
+  }
+  var popupTextPrice = card.querySelector('.popup__text--price');
+  if (!data['offer']['price']) {
+    popupTextPrice.style.display = 'none';
+  } else {
+    popupTextPrice.textContent = data['offer']['price'] + '₽/ночь';
+  }
+  var popupType = card.querySelector('.popup__type');
+  if (!data['offer']['type']) {
+    popupType.style.display = 'none';
+  } else {
+    popupType.textContent = typeToText(data['offer']['type']);
+  }
+  var popupTextCapacity = card.querySelector('.popup__text--capacity');
+  if (!data['offer']['rooms'] || !data['offer']['guests']) {
+    popupTextCapacity.style.display = 'none';
+  } else {
+    popupTextCapacity.textContent = data['offer']['rooms'] + ' комнаты для ' + data['offer']['guests'] + ' гостей';
+  }
+  var popupTextTime = card.querySelector('.popup__text--time');
+  if (!data['offer']['checkin'] || !data['offer']['checkout']) {
+    popupTextTime.style.display = 'none';
+  } else {
+    popupTextTime.textContent = 'Заезд после ' + data['offer']['checkin'] + ', выезд до ' + data['offer']['checkout'];
+  }
+  var popupFeatures = card.querySelector('.popup__features');
+  if (!data['offer']['features'] || !ALL_FEATURES) {
+    popupFeatures.style.display = 'none';
+  } else {
+    for (var i = 0; i < ALL_FEATURES.length; i++) {
+      popupFeatures.children[i].textContent = ALL_FEATURES[i];
+    }
+  }
+  var popupDescription = card.querySelector('.popup__description');
+  if (!data['offer']['description']) {
+    popupDescription.style.display = 'none';
+  } else {
+    popupDescription.textContent = data['offer']['description'];
+  }
+
+  var popupPhotoContainer = card.querySelector('.popup__photos');
+  if (!data['offer']['photos'] || !PHOTOS) {
+    popupPhotoContainer.style.display = 'none';
+  } else {
+    for (var j = 0; j < PHOTOS.length; j++) {
+      var popupPhoto = popupPhotoContainer.querySelector('.popup__photo');
+      if (j === 0) {
+        popupPhoto.src = PHOTOS[j];
+      } else {
+        var popupPhotoClone = popupPhoto.cloneNode(true);
+        popupPhotoClone.src = PHOTOS[j];
+        popupPhotoContainer.appendChild(popupPhotoClone);
+      }
+    }
+  }
+
+  return card;
+};
+
+var cardContainer = document.querySelector('.map');
+var filtersContainer = document.querySelector('.map__filters-container');
+var renderCards = function (container, data) {
+  // for (var i = 0; i < data.length; i++) {
+  container.insertBefore(createCard(data[0]), filtersContainer);
+  // }
+};
+
+renderCards(cardContainer, advertsData);
