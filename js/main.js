@@ -135,7 +135,7 @@ var renderPhotos = function (data, container, arr) {
     for (var i = 0; i < arr.length; i++) {
       var img = document.createElement('img');
       img.classList.add('popup__photo');
-      img.src = PHOTOS[i];
+      img.setAttribute('src', PHOTOS[i]);
       img.setAttribute('width', '45');
       img.setAttribute('height', '40');
       img.setAttribute('alt', 'Фотография жилья');
