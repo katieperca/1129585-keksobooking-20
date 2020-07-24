@@ -67,22 +67,6 @@ var setAddressField = function () {
 
 setAddressField();
 
-mapPinMain.addEventListener('mousedown', function (evt) {
-  if (evt.button === 0) {
-    activatePage();
-    setAddressField();
-    renderCards(cardContainer, advertsData);
-  }
-});
-
-mapPinMain.addEventListener('keydown', function (evt) {
-  if (evt.key === 'Enter') {
-    activatePage();
-    setAddressField();
-    renderCards(cardContainer, advertsData);
-  }
-});
-
 var checkRooms = function (quantity) {
   var capacityOptions = capacitySelect.querySelectorAll('option');
   capacityOptions.forEach(function (option) {
@@ -100,6 +84,26 @@ var checkRooms = function (quantity) {
 
 roomNumberSelect.addEventListener('change', function () {
   checkRooms(roomNumberSelect.value);
+});
+
+mapPinMain.addEventListener('mousedown', function (evt) {
+  if (evt.button === 0) {
+    activatePage();
+    setAddressField();
+    renderPins(pinContainer, advertsData);
+    renderCards(cardContainer, advertsData);
+    checkRooms(roomNumberSelect.value);
+  }
+});
+
+mapPinMain.addEventListener('keydown', function (evt) {
+  if (evt.key === 'Enter') {
+    activatePage();
+    setAddressField();
+    renderPins(pinContainer, advertsData);
+    renderCards(cardContainer, advertsData);
+    checkRooms(roomNumberSelect.value);
+  }
 });
 
 var getRandomIntInclusive = function (min, max) {
@@ -179,8 +183,6 @@ var renderPins = function (container, data) {
     container.appendChild(createPin(data[i]));
   }
 };
-
-renderPins(pinContainer, advertsData);
 
 var housingTypes = {
   palace: 'Дворец',
