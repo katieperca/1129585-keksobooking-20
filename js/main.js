@@ -26,12 +26,23 @@ var adFormFieldsets = adForm.querySelectorAll('.ad-form__element');
 var addressField = adForm.querySelector('#address');
 var roomNumberSelect = adForm.querySelector('#room_number');
 var capacitySelect = adForm.querySelector('#capacity');
+var timeInInput = document.querySelector('#timein');
+var timeOutInput = document.querySelector('#timeout');
+var housingTypeSelect = adForm.querySelector('#type');
+var priceForNightInput = adForm.querySelector('#price');
 var roomValues = {
   1: [1],
   2: [1, 2],
   3: [1, 2, 3],
   100: [0]
 };
+var housingMinPrice = {
+  bungalo: 0,
+  flat: 1000,
+  house: 5000,
+  palace: 10000
+};
+var pinsCreated = false;
 
 var deactivateForm = function (fieldsets, filters) {
   for (var i = 0; i < fieldsets.length; i++) {
@@ -82,29 +93,42 @@ var checkRooms = function (quantity) {
   });
 };
 
+var inAndOutInputChange = function (evt) {
+  timeInInput.value = evt.target.value;
+  timeOutInput.value = evt.target.value;
+};
+
+timeInInput.addEventListener('change', inAndOutInputChange);
+
+timeOutInput.addEventListener('change', inAndOutInputChange);
+
 roomNumberSelect.addEventListener('change', function () {
   checkRooms(roomNumberSelect.value);
 });
 
+housingTypeSelect.addEventListener('change', function () {
+  priceForNightInput.placeholder = housingMinPrice[housingTypeSelect.value];
+  priceForNightInput.setAttribute('min', housingMinPrice[housingTypeSelect.value]);
+});
+
 mapPinMain.addEventListener('mousedown', function (evt) {
-  if (evt.button === 0) {
-    activatePage();
-    setAddressField();
-    renderPins(pinContainer, advertsData);
-    renderCards(cardContainer, advertsData);
-    checkRooms(roomNumberSelect.value);
-  }
+  init(evt);
 });
 
 mapPinMain.addEventListener('keydown', function (evt) {
-  if (evt.key === 'Enter') {
+  init(evt);
+});
+
+var init = function (evt) {
+  if ((evt.button === 0 || evt.key === 'Enter') && !pinsCreated) {
     activatePage();
     setAddressField();
     renderPins(pinContainer, advertsData);
-    renderCards(cardContainer, advertsData);
+    renderCards(cardContainer, advertsData[0]);
     checkRooms(roomNumberSelect.value);
+    pinsCreated = true;
   }
-});
+};
 
 var getRandomIntInclusive = function (min, max) {
   min = Math.ceil(min);
@@ -165,6 +189,14 @@ var createAdverts = function (count) {
 
 var advertsData = createAdverts(advertsCounter);
 
+var openCard = function (data) {
+  var isMapCard = map.querySelector('.map__card');
+  if (isMapCard) {
+    isMapCard.remove();
+  }
+  renderCards(cardContainer, data);
+};
+
 var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
 var createPin = function (data) {
   var pin = templatePin.cloneNode(true);
@@ -173,11 +205,20 @@ var createPin = function (data) {
   pin.children[0].src = data['author']['avatar'];
   pin.children[0].alt = data['offer']['title'];
 
+  pin.addEventListener('click', function () {
+    openCard(data);
+  });
+
+  pin.addEventListener('keydown', function (evt) {
+    if (evt.key === 'Enter') {
+      openCard(data);
+    }
+  });
+
   return pin;
 };
 
 var pinContainer = document.querySelector('.map__pins');
-
 var renderPins = function (container, data) {
   for (var i = 0; i < data.length; i++) {
     container.appendChild(createPin(data[i]));
@@ -279,14 +320,26 @@ var createCard = function (data) {
   var popupPhotoContainer = card.querySelector('.popup__photos');
   renderPhotos(data['offer']['photos'], popupPhotoContainer, PHOTOS);
 
+  var popupClose = card.querySelector('.popup__close');
+  var closeCard = function () {
+    card.remove();
+  };
+
+  popupClose.addEventListener('click', function () {
+    closeCard();
+  });
+
+  popupClose.addEventListener('keydown', function (evt) {
+    if (evt.key === 'Escape') {
+      closeCard();
+    }
+  });
+
   return card;
 };
 
 var cardContainer = document.querySelector('.map');
 var filtersContainer = document.querySelector('.map__filters-container');
 var renderCards = function (container, data) {
-  // for (var i = 0; i < data.length; i++) {
-  container.insertBefore(createCard(data[0]), filtersContainer);
-  // }
+  container.insertBefore(createCard(data), filtersContainer);
 };
-
