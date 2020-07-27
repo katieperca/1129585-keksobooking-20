@@ -69,7 +69,7 @@
       for (var i = 0; i < arr.length; i++) {
         var img = document.createElement('img');
         img.classList.add('popup__photo');
-        img.setAttribute('src', window.card.PHOTOS[i]);
+        img.setAttribute('src', PHOTOS[i]);
         img.setAttribute('width', '45');
         img.setAttribute('height', '40');
         img.setAttribute('alt', 'Фотография жилья');
@@ -133,10 +133,10 @@
     fillElement(data['offer']['description'], popupDescription, 'textContent');
 
     var popupFeaturesContainer = card.querySelector('.popup__features');
-    renderFeaturesList(data['offer']['features'], popupFeaturesContainer, window.card.ALL_FEATURES);
+    renderFeaturesList(data['offer']['features'], popupFeaturesContainer, ALL_FEATURES);
 
     var popupPhotoContainer = card.querySelector('.popup__photos');
-    renderPhotos(data['offer']['photos'], popupPhotoContainer, window.card.PHOTOS);
+    renderPhotos(data['offer']['photos'], popupPhotoContainer, PHOTOS);
 
     var popupClose = card.querySelector('.popup__close');
     var closeCard = function () {
@@ -157,22 +157,8 @@
   };
 
   window.card = {
-    MIN_X: MIN_X,
-    MAX_X: MAX_X,
-    MIN_Y: MIN_Y,
-    MAX_Y: MAX_Y,
-    PRICES: PRICES,
-    TYPES: TYPES,
-    CHECKINS: CHECKINS,
-    CHECKOUTS: CHECKOUTS,
-    ALL_FEATURES: ALL_FEATURES,
-    PHOTOS: PHOTOS,
-    housingTypes: housingTypes,
     createAdverts: createAdverts,
-    fillElement: fillElement,
-    createCard: createCard,
-    renderPhotos: renderPhotos,
-    renderFeaturesList: renderFeaturesList
+    createCard: createCard
   };
 
 })();

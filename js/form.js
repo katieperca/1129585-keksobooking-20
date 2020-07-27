@@ -84,12 +84,6 @@
   });
 
   window.form = {
-    MAINPIN_X: MAINPIN_X,
-    MAINPIN_Y: MAINPIN_Y,
-    MAINPIN_WIDTH: MAINPIN_WIDTH,
-    MAINPIN_HEIGHT: MAINPIN_HEIGHT,
-    roomValues: roomValues,
-    housingMinPrice: housingMinPrice,
     roomNumberSelect: roomNumberSelect,
     activateForm: activateForm,
     deactivateForm: deactivateForm,
