@@ -1,13 +1,16 @@
 'use strict';
 
 (function () {
-  var URL = 'https://javascript.pages.academy/keksobooking/data';
+  var URL_LOAD = 'https://javascript.pages.academy/keksobooking/data';
+  var URL_UPLOAD = 'https://javascript.pages.academy/keksobooking1';
+  var METHOD_LOAD = 'GET';
+  var METHOD_UPLOAD = 'POST';
   var TIMEOUT_IN_MS = 10000;
   var statusCode = {
     OK: 200
   };
 
-  var createRequest = function (onSuccess, onError) {
+  var createRequest = function (url, method, onSuccess, onError, data) {
     var xhr = new XMLHttpRequest();
 
     xhr.responseType = 'json';
@@ -30,15 +33,20 @@
 
     xhr.timeout = TIMEOUT_IN_MS;
 
-    xhr.open('GET', URL);
-    xhr.send();
+    xhr.open(method, url);
+    xhr.send(data);
   };
 
   var loadData = function (onSuccess, onError) {
-    createRequest(onSuccess, onError);
+    createRequest(URL_LOAD, METHOD_LOAD, onSuccess, onError);
+  };
+
+  var uploadData = function (data, onSuccess, onError) {
+    createRequest(URL_UPLOAD, METHOD_UPLOAD, onSuccess, onError, data);
   };
 
   window.server = {
-    loadData: loadData
+    loadData: loadData,
+    uploadData: uploadData
   };
 })();

@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var PINS_COUNT = 5;
   var PINTIP_HEIGHT = 22;
   var MIN_X = 290;
   var MAX_X = 1200;
@@ -8,6 +9,14 @@
   var MAX_Y = 630;
   var map = document.querySelector('.map');
   var mapPin = map.querySelector('.map__pin--main');
+  var pinContainer = map.querySelector('.map__pins');
+
+  var renderData = function (data, showCard) {
+    renderPins(pinContainer, data.slice(0, PINS_COUNT));
+    if (showCard) {
+      renderCards(map, data[0]);
+    }
+  };
 
   var renderPins = function (container, data) {
     for (var i = 0; i < data.length; i++) {
@@ -15,9 +24,25 @@
     }
   };
 
+  var clearMap = function () {
+    pinContainer.querySelectorAll('.map__pin:not(.map__pin--main)').forEach(function (item) {
+      if (item) {
+        item.remove();
+      }
+    });
+
+    map.querySelectorAll('.map__card').forEach(function (item) {
+      if (item) {
+        item.remove();
+      }
+    });
+  };
+
   var renderCards = function (container, data) {
-    var filtersContainer = document.querySelector('.map__filters-container');
-    container.insertBefore(window.card.createCard(data), filtersContainer);
+    if (data) {
+      var filtersContainer = document.querySelector('.map__filters-container');
+      container.insertBefore(window.card.createCard(data), filtersContainer);
+    }
   };
 
   var getPinCoords = function () {
@@ -104,6 +129,8 @@
   window.map = {
     renderPins: renderPins,
     renderCards: renderCards,
-    getPinCoords: getPinCoords
+    getPinCoords: getPinCoords,
+    renderData: renderData,
+    clearMap: clearMap
   };
 })();

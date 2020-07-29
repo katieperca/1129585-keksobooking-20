@@ -4,7 +4,6 @@
   var mapPinMain = document.querySelector('.map__pin--main');
   var map = document.querySelector('.map');
   var mapFilters = map.querySelectorAll('.map__filter');
-  var pinContainer = map.querySelector('.map__pins');
   var adForm = document.querySelector('.ad-form');
   var adFormFieldsets = adForm.querySelectorAll('.ad-form__element');
   // var advertsCounter = 8;
@@ -28,10 +27,10 @@
   var init = function (evt) {
     if ((evt.button === 0 || evt.key === 'Enter') && !pinsCreated) {
       window.server.loadData(function (data) {
+        window.data = data;
         activatePage();
         window.form.setAddressField(window.map.getPinCoords());
-        window.map.renderPins(pinContainer, data);
-        window.map.renderCards(map, data[0]);
+        window.map.renderData(window.data, true);
         window.form.checkRooms(window.form.roomNumberSelect.value);
         pinsCreated = true;
       },

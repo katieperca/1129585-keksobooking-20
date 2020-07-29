@@ -8,10 +8,10 @@
     100: [0]
   };
   var housingMinPrice = {
-    bungalo: 0,
-    flat: 1000,
-    house: 5000,
-    palace: 10000
+    'bungalo': 0,
+    'flat': 1000,
+    'house': 5000,
+    'palace': 10000
   };
   var adForm = document.querySelector('.ad-form');
   var mapFeatures = document.querySelector('.map__features');
@@ -22,6 +22,7 @@
   var timeOutInput = document.querySelector('#timeout');
   var housingTypeSelect = adForm.querySelector('#type');
   var priceForNightInput = adForm.querySelector('#price');
+  var mainPage = document.querySelector('main');
 
   var deactivateForm = function (fieldsets, filters) {
     for (var i = 0; i < fieldsets.length; i++) {
@@ -68,8 +69,8 @@
   };
 
   timeInInput.addEventListener('change', inAndOutInputChange);
-
   timeOutInput.addEventListener('change', inAndOutInputChange);
+
   roomNumberSelect.addEventListener('change', function () {
     checkRooms(roomNumberSelect.value);
   });
@@ -77,6 +78,50 @@
   housingTypeSelect.addEventListener('change', function () {
     priceForNightInput.placeholder = housingMinPrice[housingTypeSelect.value];
     priceForNightInput.setAttribute('min', housingMinPrice[housingTypeSelect.value]);
+  });
+
+  var showSuccessMessage = function () {
+    var templateSuccess = document.querySelector('#success').content.querySelector('.success');
+    var successMessage = templateSuccess.cloneNode(true);
+    mainPage.appendChild(successMessage);
+    successMessage.addEventListener('click', function () {
+      successMessage.remove();
+    });
+    document.addEventListener('keydown', function (evt) {
+      if (evt.key === 'Escape') {
+        successMessage.remove();
+      }
+    });
+  };
+
+  var showErrorMessage = function () {
+    var templateError = document.querySelector('#error').content.querySelector('.error');
+    var errorMessage = templateError.cloneNode(true);
+    mainPage.appendChild(errorMessage);
+    errorMessage.querySelector('.error__button').addEventListener('click', function () {
+      errorMessage.remove();
+    });
+    errorMessage.addEventListener('click', function () {
+      errorMessage.remove();
+    });
+    document.addEventListener('keydown', function (evt) {
+      if (evt.key === 'Escape') {
+        errorMessage.remove();
+      }
+    });
+  };
+
+  adForm.addEventListener('submit', function (evt) {
+    window.server.uploadData(new FormData(adForm), function () {
+      showSuccessMessage();
+    }, function () {
+      showErrorMessage();
+    });
+    evt.preventDefault();
+  });
+
+  adForm.addEventListener('reset', function () {
+    adForm.reset();
   });
 
   window.form = {
