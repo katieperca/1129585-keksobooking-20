@@ -1,10 +1,6 @@
 'use strict';
 
 (function () {
-  var MAINPIN_X = 570;
-  var MAINPIN_Y = 375;
-  var MAINPIN_WIDTH = 65;
-  var MAINPIN_HEIGHT = 84;
   var roomValues = {
     1: [1],
     2: [1, 2],
@@ -47,8 +43,8 @@
     mapFeatures.removeAttribute('disabled');
   };
 
-  var setAddressField = function () {
-    addressField.value = (MAINPIN_X + Math.floor(MAINPIN_WIDTH / 2)) + ', ' + (MAINPIN_Y + MAINPIN_HEIGHT);
+  var setAddressField = function (coords) {
+    addressField.value = coords;
   };
 
   var checkRooms = function (quantity) {

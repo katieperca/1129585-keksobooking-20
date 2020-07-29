@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var MIN_X = 320;
+  var MIN_X = 290;
   var MAX_X = 1100;
   var MIN_Y = 130;
   var MAX_Y = 630;
@@ -11,6 +11,9 @@
   var CHECKOUTS = ['12:00', '13:00', '14:00'];
   var ALL_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
   var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
+  var IMG_HEIGHT = 40;
+  var IMG_WIDTH = 45;
+  var IMG_ALT = 'Фотография жилья';
   var housingTypes = {
     palace: 'Дворец',
     flat: 'Квартира',
@@ -61,26 +64,26 @@
     return container;
   };
 
-  var renderPhotos = function (data, container, arr) {
-    if (!data || !arr) {
+  var renderPhotos = function (arr, container) {
+    if (!arr) {
       container.setAttribute('style', 'display: none');
     } else {
       container.innerHTML = '';
       for (var i = 0; i < arr.length; i++) {
         var img = document.createElement('img');
         img.classList.add('popup__photo');
-        img.setAttribute('src', PHOTOS[i]);
-        img.setAttribute('width', '45');
-        img.setAttribute('height', '40');
-        img.setAttribute('alt', 'Фотография жилья');
+        img.setAttribute('src', arr[i]);
+        img.setAttribute('width', IMG_WIDTH);
+        img.setAttribute('height', IMG_HEIGHT);
+        img.setAttribute('alt', IMG_ALT);
         container.appendChild(img);
       }
     }
     return container;
   };
 
-  var renderFeaturesList = function (data, container, arr) {
-    if (!data || !arr) {
+  var renderFeaturesList = function (arr, container) {
+    if (!arr) {
       container.setAttribute('style', 'display: none');
     } else {
       container.innerHTML = '';
@@ -133,10 +136,10 @@
     fillElement(data['offer']['description'], popupDescription, 'textContent');
 
     var popupFeaturesContainer = card.querySelector('.popup__features');
-    renderFeaturesList(data['offer']['features'], popupFeaturesContainer, ALL_FEATURES);
+    renderFeaturesList(data['offer']['features'], popupFeaturesContainer);
 
     var popupPhotoContainer = card.querySelector('.popup__photos');
-    renderPhotos(data['offer']['photos'], popupPhotoContainer, PHOTOS);
+    renderPhotos(data['offer']['photos'], popupPhotoContainer);
 
     var popupClose = card.querySelector('.popup__close');
     var closeCard = function () {
